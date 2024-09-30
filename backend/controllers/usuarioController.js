@@ -36,7 +36,12 @@ exports.loginUsuario = async (req, res) => {
             expiresIn: '1h',
         });
 
-        res.status(200).json({ message: 'Inicio de sesión exitoso', token });
+        res.status(200).json({
+            message: 'Inicio de sesión exitoso',
+            token,
+            nombre: usuario.nombre,
+            celular: usuario.telefono
+        });
     } catch (error) {
         res.status(500).json({ message: 'Error en el inicio de sesión', error });
     }

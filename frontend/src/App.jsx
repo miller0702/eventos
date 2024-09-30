@@ -8,7 +8,6 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import Layout from './components/Layout/Layout';
 import Dashboard from './components/Layout/Dashboard';
 import Footer from './components/Layout/Footer';
-import { Box } from '@mui/material';
 
 const ProtectedRoute = ({ children }) => {
   const { token } = useAuth();
@@ -26,26 +25,34 @@ const App = () => {
     <ThemeProvider>
       <AuthProvider>
         <Router>
-          <Layout mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle}>
-            <Routes>
-              <Route path="/" element={<LoginPage />} />
-              <Route path="/dashboard" element={<ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>} />
-              {routes.map((route, index) => (
-                <Route
-                  key={index}
-                  path={route.path}
-                  element={
-                    <ProtectedRoute>
-                      <Box>{route.text}</Box>
-                    </ProtectedRoute>
-                  }
-                />
-              ))}
-            </Routes>
-            <Footer />
-          </Layout>
+          <Routes>
+            <Route path="/" element={<LoginPage />} />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Layout mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle}>
+                    <Dashboard />
+                    <Footer />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            {routes.map(({ path, component: Component }, index) => (
+              <Route
+                key={index}
+                path={path}
+                element={
+                  <ProtectedRoute>
+                    <Layout mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle}>
+                      <Component />
+                      <Footer />
+                    </Layout>
+                  </ProtectedRoute>
+                }
+              />
+            ))}
+          </Routes>
         </Router>
       </AuthProvider>
     </ThemeProvider>

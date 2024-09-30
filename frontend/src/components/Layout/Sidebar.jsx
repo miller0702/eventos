@@ -1,13 +1,30 @@
 import React from 'react';
-import { Drawer, List, ListItem, ListItemText, ListItemIcon } from '@mui/material';
+import { Drawer, List, ListItem, ListItemText, ListItemIcon, Box, Typography, Divider } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import EventIcon from '@mui/icons-material/Event';
 import PeopleIcon from '@mui/icons-material/People';
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+import Perfil from '../../assets/img/logos/person.png';
+import sidebarStyles from '../../styles/SidebarStyles';
+import { useTheme } from '../../context/ThemeContext';
 
 const Sidebar = ({ mobileOpen, handleDrawerToggle }) => {
+  const { logout, currentUser } = useAuth();
+  const navigate = useNavigate();
+  const { theme } = useTheme();
+  const styles = sidebarStyles(theme);
+  const location = useLocation();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
+
   const items = [
     { text: 'Home', icon: <HomeIcon />, path: '/dashboard' },
     { text: 'Eventos', icon: <EventIcon />, path: '/eventos' },
@@ -17,9 +34,10 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle }) => {
     { text: 'Usuarios', icon: <PeopleAltIcon />, path: '/usuarios' },
   ];
 
+  const isActive = (path) => location.pathname === path;
+
   return (
     <>
-      {/* Drawer temporal para pantallas pequeñas */}
       <Drawer
         variant="temporary"
         open={mobileOpen}
@@ -27,37 +45,67 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle }) => {
         ModalProps={{
           keepMounted: true,
         }}
-        sx={{
-          display: { xs: 'block', sm: 'none' }, // Solo mostrar en pantallas pequeñas
-          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 240 },
-        }}
+        sx={styles.drawerToggle}
       >
+        <Box style={styles.logoContainer}>
+          <img src={Perfil} alt="Perfil del Usuario" style={styles.logo} />
+          <Typography variant="h6" style={styles.userName}>
+            {currentUser?.name || 'Usuario'}
+          </Typography>
+        </Box>
         <List>
-          {items.map(({ text, icon }) => (
-            <ListItem button key={text} onClick={handleDrawerToggle}>
-              <ListItemIcon>{icon}</ListItemIcon>
-              <ListItemText primary={text} />
+          {items.map(({ text, icon, path }) => (
+            <ListItem
+              button
+              key={text}
+              component={Link}
+              to={path}
+              onClick={handleDrawerToggle}
+              sx={isActive(path) ? styles.activeItem : null}
+            >
+              <ListItemIcon style={styles.icon}>{icon}</ListItemIcon>
+              <ListItemText primary={text} style={styles.text} />
             </ListItem>
           ))}
+          <ListItem button key="Logout" onClick={handleLogout}>
+            <ListItemIcon style={styles.icon}>
+              <ExitToAppIcon style={styles.icon} />
+            </ListItemIcon>
+            <ListItemText primary="Logout" style={styles.text} />
+          </ListItem>
         </List>
       </Drawer>
 
-      {/* Drawer permanente para pantallas grandes */}
       <Drawer
         variant="permanent"
-        sx={{
-          display: { xs: 'none', sm: 'block' }, // Solo mostrar en pantallas grandes
-          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 240 },
-        }}
+        sx={styles.drawerStatic}
         open
       >
+        <Box style={styles.logoContainer}> 
+          <img src={Perfil} alt="Perfil del Usuario" style={styles.logo} />
+          <Typography variant="h6" style={styles.userName}>
+            {currentUser?.name || 'Usuario'}
+          </Typography>
+        </Box>
         <List>
-          {items.map(({ text, icon }) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{icon}</ListItemIcon>
-              <ListItemText primary={text} />
+          {items.map(({ text, icon, path }) => (
+            <ListItem
+              button
+              key={text}
+              component={Link}
+              to={path}
+              sx={isActive(path) ? styles.activeItem : null}
+            >
+              <ListItemIcon style={styles.icon}>{icon}</ListItemIcon>
+              <ListItemText primary={text} style={styles.text} />
             </ListItem>
           ))}
+          <ListItem button key="Logout" onClick={handleLogout}>
+            <ListItemIcon style={styles.icon}>
+              <ExitToAppIcon />
+            </ListItemIcon>
+            <ListItemText primary="Logout" style={styles.text} />
+          </ListItem>
         </List>
       </Drawer>
     </>
