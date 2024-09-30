@@ -1,4 +1,3 @@
-// src/App.js
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import LoginPage from './components/Login/LoginPage';
@@ -7,7 +6,6 @@ import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Layout from './components/Layout/Layout';
 import Dashboard from './components/Layout/Dashboard';
-import Footer from './components/Layout/Footer';
 import { Box } from '@mui/material';
 
 const ProtectedRoute = ({ children }) => {
@@ -26,26 +24,25 @@ const App = () => {
     <ThemeProvider>
       <AuthProvider>
         <Router>
-          <Layout mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle}>
-            <Routes>
-              <Route path="/" element={<LoginPage />} />
-              <Route path="/dashboard" element={<ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>} />
+          <Routes>
+            <Route path="/" element={<LoginPage />} />
+            <Route path="/" element={<Layout mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle} />}>
+              <Route path="/dashboard" element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+              />
               {routes.map((route, index) => (
-                <Route
-                  key={index}
-                  path={route.path}
-                  element={
-                    <ProtectedRoute>
-                      <Box>{route.text}</Box>
-                    </ProtectedRoute>
-                  }
+                <Route key={index} path={route.path} element={
+                  <ProtectedRoute>
+                    <Box>{route.text}</Box>
+                  </ProtectedRoute>
+                }
                 />
               ))}
-            </Routes>
-            <Footer />
-          </Layout>
+            </Route>
+          </Routes>
         </Router>
       </AuthProvider>
     </ThemeProvider>

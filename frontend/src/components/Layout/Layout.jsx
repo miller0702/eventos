@@ -1,8 +1,8 @@
-// src/components/Layout/Layout.js
 import React from 'react';
 import { Box, AppBar, Toolbar, IconButton, Typography } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import Sidebar from './Sidebar'; // Asegúrate de que la ruta sea correcta
+import Sidebar from './Sidebar';
+import Footer from './Footer';
 
 const Layout = ({ children, mobileOpen, handleDrawerToggle }) => {
   return (
@@ -14,7 +14,7 @@ const Layout = ({ children, mobileOpen, handleDrawerToggle }) => {
             color="inherit"
             aria-label="open drawer"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }} // Solo mostrar en pantallas pequeñas
+            sx={{ mr: 2, display: { sm: 'none' } }}
           >
             <MenuIcon />
           </IconButton>
@@ -23,19 +23,23 @@ const Layout = ({ children, mobileOpen, handleDrawerToggle }) => {
           </Typography>
         </Toolbar>
       </AppBar>
+      
       <Sidebar mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle} />
+      
       <Box
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3, // Relleno alrededor del contenido
-          mt: 8, // Margen superior para el contenido principal debajo del AppBar
-          ml: { xs: 0, sm: 30 }, // Margen izquierdo para que no quede detrás del Drawer en pantallas grandes
-          transition: 'margin 0.3s', // Transición suave para el margen
+          p: 3,
+          mt: { xs: 7, sm: 8 },
+          ml: { xs: 0, sm: 30 },
+          transition: 'margin 0.3s',
         }}
       >
         {children}
       </Box>
+      
+      <Footer />
     </Box>
   );
 };

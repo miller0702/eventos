@@ -1,5 +1,6 @@
 import React from 'react';
 import { Drawer, List, ListItem, ListItemText, ListItemIcon } from '@mui/material';
+import { Link } from 'react-router-dom'; // Importar Link
 import HomeIcon from '@mui/icons-material/Home';
 import EventIcon from '@mui/icons-material/Event';
 import PeopleIcon from '@mui/icons-material/People';
@@ -19,7 +20,6 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle }) => {
 
   return (
     <>
-      {/* Drawer temporal para pantallas pequeñas */}
       <Drawer
         variant="temporary"
         open={mobileOpen}
@@ -28,13 +28,13 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle }) => {
           keepMounted: true,
         }}
         sx={{
-          display: { xs: 'block', sm: 'none' }, // Solo mostrar en pantallas pequeñas
+          display: { xs: 'block', sm: 'none' },
           '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 240 },
         }}
       >
         <List>
-          {items.map(({ text, icon }) => (
-            <ListItem button key={text} onClick={handleDrawerToggle}>
+          {items.map(({ text, icon, path }) => (
+            <ListItem button key={text} component={Link} to={path} onClick={handleDrawerToggle}>
               <ListItemIcon>{icon}</ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>
@@ -42,18 +42,17 @@ const Sidebar = ({ mobileOpen, handleDrawerToggle }) => {
         </List>
       </Drawer>
 
-      {/* Drawer permanente para pantallas grandes */}
       <Drawer
         variant="permanent"
         sx={{
-          display: { xs: 'none', sm: 'block' }, // Solo mostrar en pantallas grandes
+          display: { xs: 'none', sm: 'block' },
           '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 240 },
         }}
         open
       >
         <List>
-          {items.map(({ text, icon }) => (
-            <ListItem button key={text}>
+          {items.map(({ text, icon, path }) => (
+            <ListItem button key={text} component={Link} to={path}>
               <ListItemIcon>{icon}</ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>
