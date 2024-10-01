@@ -6,7 +6,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Layout from './components/Layout/Layout';
 import Dashboard from './components/Layout/Dashboard';
-import { Box } from '@mui/material';
+import Footer from './components/Layout/Footer';
 
 const ProtectedRoute = ({ children }) => {
   const { token } = useAuth();
@@ -26,22 +26,31 @@ const App = () => {
         <Router>
           <Routes>
             <Route path="/" element={<LoginPage />} />
-            <Route path="/" element={<Layout mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle} />}>
-              <Route path="/dashboard" element={
+            <Route
+              path="/dashboard"
+              element={
                 <ProtectedRoute>
-                  <Dashboard />
+                  <Layout mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle}>
+                    <Dashboard />
+                    <Footer />
+                  </Layout>
                 </ProtectedRoute>
               }
-              />
-              {routes.map((route, index) => (
-                <Route key={index} path={route.path} element={
+            />
+            {routes.map(({ path, component: Component }, index) => (
+              <Route
+                key={index}
+                path={path}
+                element={
                   <ProtectedRoute>
-                    <Box>{route.text}</Box>
+                    <Layout mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle}>
+                      <Component />
+                      <Footer />
+                    </Layout>
                   </ProtectedRoute>
                 }
-                />
-              ))}
-            </Route>
+              />
+            ))}
           </Routes>
         </Router>
       </AuthProvider>

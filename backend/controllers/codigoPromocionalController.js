@@ -2,6 +2,11 @@ const CodigoPromocional = require('../models/CodigoPromocional');
 
 exports.crearCodigoPromocional = async (req, res) => {
     const { codigo, valor, fecha_inicio, fecha_cierre, estado } = req.body;
+
+    if (!codigo || valor === undefined || !fecha_inicio || !fecha_cierre || !estado) {
+        return res.status(400).json({ message: 'Todos los campos son obligatorios.' });
+    }
+
     try {
         const codigoPromocional = await CodigoPromocional.create(codigo, valor, fecha_inicio, fecha_cierre, estado);
         res.status(201).json({ message: 'Código promocional creado con éxito', codigoPromocional });
@@ -9,6 +14,7 @@ exports.crearCodigoPromocional = async (req, res) => {
         res.status(500).json({ message: 'Error al crear código promocional', error });
     }
 };
+
 
 exports.obtenerCodigosPromocionales = async (req, res) => {
     try {

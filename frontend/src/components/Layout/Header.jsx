@@ -9,7 +9,7 @@ const Header = ({ toggleSidebar }) => {
         <IconButton edge="start" color="inherit" onClick={toggleSidebar}>
           <MenuIcon />
         </IconButton>
-        <Typography variant="h6">Título de la Aplicación</Typography>
+        <Typography variant="h1">Gestion de Eventos</Typography>
       </Toolbar>
     </AppBar>
   );

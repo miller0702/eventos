@@ -2,13 +2,19 @@ const db = require('../config/db');
 
 const Asistente = {
     create: async (nombres, apellidos, fecha_nacimiento, email, celular) => {
-        const [result] = await db.execute(
-            `INSERT INTO asistentes (nombres, apellidos, fecha_nacimiento, email, celular)
-            VALUES (?, ?, ?, ?, ?)`,
-            [nombres, apellidos, fecha_nacimiento, email, celular]
-        );
-        return result;
+        try {
+            const [result] = await db.execute(
+                `INSERT INTO asistentes (nombres, apellidos, fecha_nacimiento, email, celular)
+                VALUES (?, ?, ?, ?, ?)`,
+                [nombres, apellidos, fecha_nacimiento, email, celular]
+            );
+            return result;
+        } catch (error) {
+            console.error('Error al crear asistente en el modelo:', error);
+            throw new Error('Error al crear asistente');
+        }
     },
+    
     getAll: async () => {
         const [rows] = await db.execute('SELECT * FROM asistentes');
         return rows;

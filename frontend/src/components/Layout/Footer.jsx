@@ -14,7 +14,7 @@ const Footer = () => {
         width: '100%',
       }}
     >
-      <Typography variant="body2">&copy; 2024 Tu Empresa. Todos los derechos reservados.</Typography>
+      <Typography variant="body2">&copy; 2024 Eventos - Miller Alvarez. Todos los derechos reservados.</Typography>
     </Box>
   );
 };

@@ -1,19 +1,23 @@
 import React, { useContext, useState } from 'react';
-import { TextField, Button, Typography, Container, Box } from '@mui/material';
+import { TextField, Button, Typography, Box } from '@mui/material';
 import { AuthContext } from '../../context/AuthContext';
 import loginStyles from '../../styles/LoginStyles';
 import { useTheme } from '../../context/ThemeContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 import Logo from '../../assets/img/login/logo.png';
 
 const LoginPage = () => {
-    const { theme, toggleTheme } = useTheme();
+    const { theme } = useTheme();
     const styles = loginStyles(theme);
-    const { login } = useContext(AuthContext);
+    const { login, token } = useContext(AuthContext);
     const [email, setEmail] = useState('');
     const [contraseña, setContraseña] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
+
+    if (token) {
+        return <Navigate to="/dashboard" />;
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();

@@ -2,13 +2,20 @@ const Asistente = require('../models/Asistente');
 
 exports.crearAsistente = async (req, res) => {
     const { nombres, apellidos, fecha_nacimiento, email, celular } = req.body;
+
+    if (!nombres || !apellidos || !fecha_nacimiento || !email || !celular) {
+        return res.status(400).json({ message: 'Todos los campos son obligatorios.' });
+    }
+
     try {
         const asistente = await Asistente.create(nombres, apellidos, fecha_nacimiento, email, celular);
         res.status(201).json({ message: 'Asistente creado con éxito', asistente });
     } catch (error) {
+        console.error('Error al crear asistente:', error); // Registrar el error
         res.status(500).json({ message: 'Error al crear asistente', error });
     }
 };
+
 
 exports.obtenerAsistentes = async (req, res) => {
     try {
